@@ -1,0 +1,52 @@
+import express from "express";
+import {
+  attachAddQuery,
+  attachDeleteQuery,
+  attachFindQuery,
+  attachUpdateQuery,
+} from "../../../middlewares/query.middleware.js";
+import categoryModel from "../models/category.model.js";
+import { excuteQuery } from "../../../handlers/excute.handler.js";
+import { filterOne } from "../../../middlewares/featuer.middleware.js";
+import validate from "../../../middlewares/validation.middleware.js";
+import {
+  deleteCategorySchema,
+  addCategorySchema,
+  upadteCategorySchema,
+} from "../validations/category.validation.js";
+
+import subCategoryRouter from "./subCategory.routes.js";
+
+const router = express.Router();
+
+router
+  .route("/")
+  .get(attachFindQuery(categoryModel), excuteQuery({ status: 200 }))
+  .post(
+    validate(addCategorySchema),
+    attachAddQuery(categoryModel),
+    excuteQuery(201)
+  );
+
+router
+  .route("/:categorySlug")
+  .get(
+    attachFindQuery(categoryModel),
+    filterOne({ filedName: "slug", paramName: "categorySlug" }),
+    excuteQuery(200)
+  )
+  .put(
+    validate(upadteCategorySchema),
+    attachUpdateQuery(categoryModel),
+    filterOne({ filedName: "slug", paramName: "categorySlug" }),
+    excuteQuery()
+  )
+  .delete(
+    validate(deleteCategorySchema),
+    attachDeleteQuery(categoryModel),
+    filterOne({ filedName: "slug", paramName: "categorySlug" }),
+    excuteQuery()
+  );
+
+router.use("/:categorySlug/subcategory", subCategoryRouter);
+export default router;
