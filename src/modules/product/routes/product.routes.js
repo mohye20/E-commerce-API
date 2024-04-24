@@ -1,5 +1,9 @@
 import express from "express";
-import { filterOne } from "../../../middlewares/featuer.middleware.js";
+import {
+  filterOne,
+  paginateQuery,
+  populateQuery,
+} from "../../../middlewares/featuer.middleware.js";
 import productModel from "../models/product.model.js";
 import validate from "../../../middlewares/validation.middleware.js";
 import { excuteQuery } from "../../../handlers/excute.handler.js";
@@ -19,18 +23,29 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(attachFindQuery(productModel), excuteQuery())
+  .get(
+    attachFindQuery(productModel),
+    paginateQuery(1),
+    populateQuery("subcategory_id", ["-slug"]),
+    excuteQuery()
+  )
   .post(
     validate(addProductSchema),
     attachAddQuery(productModel),
-    excuteQuery()
+    excuteQuery({ status: 201 })
   );
 
 router
   .route("/:productSlug")
   .get(
     attachFindQuery(productModel),
-    filterOne({ filedName: "slug", paramName: "productSlug" }, excuteQuery())
+    filterOne(
+      { filedName: "slug", paramName: "productSlug" },
+      (req, res, next) => {
+        res.json(" filterOne Done");
+      },
+      excuteQuery()
+    )
   )
   .put(
     validate(updateProductSchema),

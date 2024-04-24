@@ -8,12 +8,17 @@ export const filterOne = ({ filedName, paramName }) => {
 export const paginateQuery =
   (pageSize = 5) =>
   (req, res, next) => {
-    let { page } = +req.query || 1;
+    let page = +req.query.page || 1;
     if (page < 1) {
       page = 1;
     }
 
-    req.dbQuery = req.dbQuery.skip((page - 1) * pageSize).limt(pageSize);
+    req.dbQuery = req.dbQuery.skip((page - 1) * pageSize).limit(pageSize);
 
     next();
   };
+
+export const populateQuery = (filedName, options) => (req, res, next) => {
+  req.dbQuery = req.dbQuery.populate(filedName, options);
+  next();
+};
