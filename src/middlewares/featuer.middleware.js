@@ -4,3 +4,16 @@ export const filterOne = ({ filedName, paramName }) => {
     next();
   };
 };
+
+export const paginateQuery =
+  (pageSize = 5) =>
+  (req, res, next) => {
+    let { page } = +req.query || 1;
+    if (page < 1) {
+      page = 1;
+    }
+
+    req.dbQuery = req.dbQuery.skip((page - 1) * pageSize).limt(pageSize);
+
+    next();
+  };

@@ -38,6 +38,7 @@ router
   .get(
     attachFindQuery(subCategoryModel),
     filterOne({ filedName: "slug", paramName: "subCategorySlug" }),
+    attachCategoryId(),
     filterSubCategories(),
     excuteQuery()
   )
@@ -45,12 +46,15 @@ router
     attachUpdateQuery(subCategoryModel),
     validate(upadteSubCategorySchema),
     filterOne({ filedName: "slug", paramName: "subCategorySlug" }),
+    attachCategoryId(),
+    filterSubCategories(),
     excuteQuery()
   )
   .delete(
     attachDeleteQuery(subCategoryModel),
     validate(deleteSubCategorySchema),
     filterOne({ filedName: "slug", paramName: "subCategorySlug" }),
+    attachCategoryId(),
     filterSubCategories(),
 
     excuteQuery()

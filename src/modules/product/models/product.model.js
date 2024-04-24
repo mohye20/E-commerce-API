@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { validate } from "uuid";
+import slugify from "slugify";
 
 const productSchema = new mongoose.Schema({
   title: {
@@ -43,7 +43,7 @@ const productSchema = new mongoose.Schema({
     min: 1,
     required: true,
     validate: {
-      validator: (value) => {
+      validator: function (value) {
         return value <= this.price;
       },
       message: "The Discound Price Must be less than or equal to Price",
@@ -52,16 +52,27 @@ const productSchema = new mongoose.Schema({
 
   cover_image: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    // required: true,
     ref: "image",
   },
 
   features: [
     {
-      key: Stirng,
-      value: Stirng,
+      key: String,
+      value: String,
     },
   ],
+
+  subcategory_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "subCategory",
+    required: true,
+  },
+});
+
+productSchema.pre("save", function (next) {
+  this.slug = slugify(this.title, { lower: true });
+  next();
 });
 
 const productModel = mongoose.model("product", productSchema);
