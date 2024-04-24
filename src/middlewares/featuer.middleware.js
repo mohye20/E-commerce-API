@@ -22,3 +22,9 @@ export const populateQuery = (filedName, options) => (req, res, next) => {
   req.dbQuery = req.dbQuery.populate(filedName, options);
   next();
 };
+
+export const sortQuery = () => (req, res, next) => {
+  const { sort, dir = "asc" } = req.query;
+  req.dbQuery = req.dbQuery.sort({ [sort]: dir });
+  next();
+};
