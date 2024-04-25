@@ -35,3 +35,15 @@ export const selectFiledsQuery = () => (req, res, next) => {
   req.dbQuery = req.dbQuery.select(fields.split(","));
   next();
 };
+
+export const searchQuery = (fieldsToSearch) => (req, res, next) => {
+  const { keyword } = req.query;
+  if (!keyword) return next();
+
+  const regexQuery = {
+    $or: fieldsToSearch.map((field) => ({ [field]: new RegExp(keyword, "i") })),
+  };
+  console.log(regexQuery);
+  req.dbQuery = req.dbQuery.find(regexQuery);
+  next();
+};

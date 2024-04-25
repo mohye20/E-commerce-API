@@ -3,6 +3,7 @@ import {
   filterOne,
   paginateQuery,
   populateQuery,
+  searchQuery,
   selectFiledsQuery,
   sortQuery,
 } from "../../../middlewares/featuer.middleware.js";
@@ -31,6 +32,7 @@ router
     populateQuery("subcategory_id", ["-slug"]),
     sortQuery(),
     selectFiledsQuery(),
+    searchQuery(["title", "description"]),
     excuteQuery()
   )
   .post(
