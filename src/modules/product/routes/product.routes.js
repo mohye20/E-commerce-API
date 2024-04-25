@@ -3,6 +3,7 @@ import {
   filterOne,
   paginateQuery,
   populateQuery,
+  selectFiledsQuery,
   sortQuery,
 } from "../../../middlewares/featuer.middleware.js";
 import productModel from "../models/product.model.js";
@@ -26,9 +27,10 @@ router
   .route("/")
   .get(
     attachFindQuery(productModel),
-    // paginateQuery(3),
-    // populateQuery("subcategory_id", ["-slug"]),
+    paginateQuery(3),
+    populateQuery("subcategory_id", ["-slug"]),
     sortQuery(),
+    selectFiledsQuery(),
     excuteQuery()
   )
   .post(

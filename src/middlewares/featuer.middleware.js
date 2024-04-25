@@ -25,6 +25,13 @@ export const populateQuery = (filedName, options) => (req, res, next) => {
 
 export const sortQuery = () => (req, res, next) => {
   const { sort, dir = "asc" } = req.query;
+  if (!sort) return next();
   req.dbQuery = req.dbQuery.sort({ [sort]: dir });
+  next();
+};
+export const selectFiledsQuery = () => (req, res, next) => {
+  const { fields } = req.query;
+  if (!fields) return next();
+  req.dbQuery = req.dbQuery.select(fields.split(","));
   next();
 };
