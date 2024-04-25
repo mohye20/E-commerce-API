@@ -43,7 +43,27 @@ export const searchQuery = (fieldsToSearch) => (req, res, next) => {
   const regexQuery = {
     $or: fieldsToSearch.map((field) => ({ [field]: new RegExp(keyword, "i") })),
   };
-  console.log(regexQuery);
   req.dbQuery = req.dbQuery.find(regexQuery);
+  next();
+};
+
+export const filterQuery = () => (req, res, next) => {
+  const exculutionList = ["page", "sort", "keyword", "fileds", "dir"];
+  const filterFileds = { ...req.query };
+
+  exculutionList.forEach((item) => {
+    delete filterFileds[item];
+  });
+
+  const filterFiledsString = JSON.stringify(filterFileds);
+
+  const modifiedFilterFiledsString = filterFiledsString.replace(
+    /lt|lte|gt|gte/g,
+    (match) => `$${match}`
+  );
+
+  const modifiedFilterFileds = JSON.parse(modifiedFilterFiledsString);
+
+  req.dbQuery = req.dbQuery.where(modifiedFilterFileds);
   next();
 };

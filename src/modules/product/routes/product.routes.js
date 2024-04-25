@@ -1,6 +1,7 @@
 import express from "express";
 import {
   filterOne,
+  filterQuery,
   paginateQuery,
   populateQuery,
   searchQuery,
@@ -33,6 +34,7 @@ router
     sortQuery(),
     selectFiledsQuery(),
     searchQuery(["title", "description"]),
+    filterQuery(),
     excuteQuery()
   )
   .post(
