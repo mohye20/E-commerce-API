@@ -26,7 +26,6 @@ export const signIn = catchError(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await userSearch(email);
 
-  console.log(user);
   if (!user) {
     throw new AppError("User not found", 404);
   }

@@ -7,7 +7,7 @@ const validate = (schema) => {
         ...(req.body && { body: req.body }),
         ...(req.query && { query: req.query }),
         ...(req.params && { params: req.params }),
-        ...(req.files && { files: req.files }),
+        ...(req.file && { file: req.file }),
         ...(req.files && { files: req.files }),
       },
       { abortEarly: false }

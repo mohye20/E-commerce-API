@@ -22,7 +22,7 @@ const categorySchema = new mongoose.Schema(
 
     image: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: "image",
     },
   },
@@ -32,7 +32,6 @@ const categorySchema = new mongoose.Schema(
 );
 
 categorySchema.pre("save", function (next) {
-  console.log("this.name:", this.name);
   this.slug = slugify(this.name, { lower: true });
   next();
 });
@@ -40,6 +39,11 @@ categorySchema.pre("save", function (next) {
 categorySchema.pre("updateMany", function (next) {
   if (this._update.name)
     this._update.slug = slugify(this._update.name, { lower: true });
+  next();
+});
+
+categorySchema.pre(/find/, function (next) {
+  this.populate("image", ["path"]);
   next();
 });
 const categoryModel = mongoose.model("category", categorySchema);

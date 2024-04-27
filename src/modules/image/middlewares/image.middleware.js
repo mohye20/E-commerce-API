@@ -1,17 +1,29 @@
-import { catchError } from "../../../utils/errorHandler.js";
+import AppError, { catchError } from "../../../utils/errorHandler.js";
 import imageModel from "../models/image.model.js";
+import { makeImage } from "../utils/image.utils.js";
 
-export const attachImage = () =>
-  catchError(async (req, res, next) => {
-    if (!req.file) return next();
-    const { public_id, secure_url } = await cloudinary.uploader.upload(
-      req.file.path
-    );
-    const image = await imageModel.create({
-      name: public_id,
-      path: secure_url,
-    });
+// export const attachImage = (bodyFiledName) =>
+//   catchError(async (req, res, next) => {
+//     if (!req.file) return next();
+//     console.log(req.file);
 
-    req.body.image = image._id;
+//     const image = await makeImage(req.file.path);
+
+//     req.body[bodyFiledName] = image._id;
+
+//     next();
+//   });
+
+export const attachImage = (bodyFieldName) => {
+  return catchError(async (req, res, next) => {
+    if (!req.file) return new AppError("Error");
+
+    const image = await makeImage(req.file.path);
+
+    req.body[bodyFieldName] = image._id;
+    console.log("image", image);
+    console.log("file", req.file);
+
     next();
   });
+};

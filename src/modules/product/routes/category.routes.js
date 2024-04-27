@@ -17,6 +17,7 @@ import {
 
 import subCategoryRouter from "./subCategory.routes.js";
 import upload from "../../../middlewares/upload.js";
+import { attachImage } from "../../image/middlewares/image.middleware.js";
 
 const router = express.Router();
 
@@ -26,8 +27,9 @@ router
   .post(
     upload.single("image"),
     validate(addCategorySchema),
+    attachImage("image"),
     attachAddQuery(categoryModel),
-    excuteQuery(201)
+    excuteQuery({ status: 201 })
   );
 
 router
