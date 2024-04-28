@@ -52,7 +52,7 @@ const productSchema = new mongoose.Schema({
 
   cover_image: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: true,
+    required: true,
     ref: "image",
   },
 
@@ -75,6 +75,10 @@ productSchema.pre("save", function (next) {
   next();
 });
 
+productSchema.pre(/find/, function (next) {
+  this.populate("cover_image");
+  next();
+});
 const productModel = mongoose.model("product", productSchema);
 
 export default productModel;

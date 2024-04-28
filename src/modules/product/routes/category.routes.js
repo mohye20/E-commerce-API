@@ -28,7 +28,6 @@ router
   .post(
     upload.single("image"),
     validate(addCategorySchema),
-    // assertUniqueCategory,
     attachImage("image"),
     attachAddQuery(categoryModel),
     excuteQuery({ status: 201 })

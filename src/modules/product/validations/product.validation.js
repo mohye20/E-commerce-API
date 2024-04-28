@@ -17,6 +17,7 @@ export const addProductSchema = joi.object({
   },
   query: {},
   params: {},
+  files: joi.object().required(),
 });
 
 export const updateProductSchema = joi.object({
@@ -36,6 +37,7 @@ export const updateProductSchema = joi.object({
   },
   params: { productSlug: joi.string().required() },
   query: {},
+  files: joi.object(),
 });
 
 export const deleteProductSchema = joi.object({

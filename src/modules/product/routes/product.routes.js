@@ -22,6 +22,8 @@ import {
   deleteProductSchema,
   updateProductSchema,
 } from "../validations/product.validation.js";
+import upload from "../../../middlewares/upload.js";
+import { attachCoverImage } from "../middlewares/product.middleware.js";
 
 const router = express.Router();
 
@@ -38,7 +40,13 @@ router
     excuteQuery()
   )
   .post(
+    upload.fields([
+      { name: "cover_image", maxCount: 1 },
+      { name: "images", maxCount: 10 },
+    ]),
+
     validate(addProductSchema),
+    attachCoverImage(),
     attachAddQuery(productModel),
     excuteQuery({ status: 201 })
   );

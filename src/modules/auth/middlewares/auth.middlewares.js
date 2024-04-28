@@ -11,7 +11,6 @@ export const authenticate = async (req, res, next) => {
     throw new AppError(error.message, 498);
   });
 
-  console.log(decoded);
   req.user = decoded;
   next();
 };

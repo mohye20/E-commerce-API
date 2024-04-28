@@ -24,7 +24,6 @@ const imageSchema = new mongoose.Schema(
 
 imageSchema.pre(/delete/i, async function (next) {
   const toBeDeletedImage = await imageModel.findOne(this._conditions);
-  console.log(this._conditions, toBeDeletedImage);
   if (!toBeDeletedImage) return next();
   await deleteImage(toBeDeletedImage.name); //
   next(); //

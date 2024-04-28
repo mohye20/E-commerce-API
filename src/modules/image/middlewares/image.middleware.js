@@ -6,9 +6,8 @@ export const attachImage = (bodyFieldName) => {
     if (!req.file) return new AppError("Error");
 
     const image = await makeImage(req.file.path);
-
+    req[bodyFieldName] = image;
     req.body[bodyFieldName] = image._id;
-
     next();
   });
 };
