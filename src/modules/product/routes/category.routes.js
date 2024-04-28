@@ -18,6 +18,7 @@ import {
 import subCategoryRouter from "./subCategory.routes.js";
 import upload from "../../../middlewares/upload.js";
 import { attachImage } from "../../image/middlewares/image.middleware.js";
+import assertUniqueCategory from "../middlewares/assertCategoryUnique.middleware.js";
 
 const router = express.Router();
 
@@ -27,6 +28,7 @@ router
   .post(
     upload.single("image"),
     validate(addCategorySchema),
+    // assertUniqueCategory,
     attachImage("image"),
     attachAddQuery(categoryModel),
     excuteQuery({ status: 201 })
@@ -40,6 +42,8 @@ router
     excuteQuery(200)
   )
   .put(
+    upload.single("image"),
+    attachImage("image"),
     validate(upadteCategorySchema),
     attachUpdateQuery(categoryModel),
     filterOne({ filedName: "slug", paramName: "categorySlug" }),

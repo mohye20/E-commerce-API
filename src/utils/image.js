@@ -7,6 +7,6 @@ export const uploadImage = async (path) => {
   return { imageName, imageUrl };
 };
 
-export const deleteImage = catchError(async (imageName) => {
+export const deleteImage = async (imageName) => {
   await cloudinary.uploader.destroy(imageName);
-});
+};

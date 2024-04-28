@@ -10,9 +10,10 @@ export const addCategorySchema = joi.object({
 });
 
 export const upadteCategorySchema = joi.object({
-  body: { name: joi.string().min(3).max(200).trim() },
+  body: { name: joi.string().min(3).max(200).trim(), image: joi.object() },
   query: {},
   params: { categorySlug: joi.string().required() },
+  file: joi.object(),
 });
 
 export const deleteCategorySchema = joi.object({

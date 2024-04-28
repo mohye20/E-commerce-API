@@ -46,6 +46,25 @@ categorySchema.pre(/find/, function (next) {
   this.populate("image", ["path"]);
   next();
 });
+
+categorySchema.pre(/delete/i, async function (next) {
+  const toBeDeletedCategory = await categoryModel.findOne(this._conditions);
+  if (!toBeDeletedCategory) return next();
+  await mongoose
+    .model("image")
+    .findByIdAndDelete(toBeDeletedCategory.image._id);
+  next();
+});
+
+categorySchema.pre(/update/i, async function (next) {
+  if (!this._update.image) return next();
+  const toBeUpdateCategory = await categoryModel.findOne(this._conditions);
+  if (!toBeUpdateCategory) return next();
+  await mongoose.model("image").findByIdAndDelete(toBeUpdateCategory.image._id);
+
+  next();
+});
+
 const categoryModel = mongoose.model("category", categorySchema);
 
 export default categoryModel;
