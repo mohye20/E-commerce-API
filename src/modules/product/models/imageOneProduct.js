@@ -4,7 +4,7 @@ const imageOnProductSchema = new mongoose.Schema(
   {
     image_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "images",
+      ref: "image",
       required: true,
     },
 
@@ -18,6 +18,11 @@ const imageOnProductSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+imageOnProductSchema.pre(/find/, function (next) {
+  this.populate("image_id");
+  next();
+});
 
 const imageOnProductModel = mongoose.model(
   "image_product",

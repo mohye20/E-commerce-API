@@ -24,6 +24,7 @@ import {
 } from "../validations/product.validation.js";
 import upload from "../../../middlewares/upload.js";
 import { attachCoverImage } from "../middlewares/product.middleware.js";
+import { addProductWithImages } from "../controllers/product.controller.js";
 
 const router = express.Router();
 
@@ -48,7 +49,7 @@ router
     validate(addProductSchema),
     attachCoverImage(),
     attachAddQuery(productModel),
-    excuteQuery({ status: 201 })
+    addProductWithImages()
   );
 
 router
