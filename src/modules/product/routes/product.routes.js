@@ -24,7 +24,10 @@ import {
 } from "../validations/product.validation.js";
 import upload from "../../../middlewares/upload.js";
 import { attachCoverImage } from "../middlewares/product.middleware.js";
-import { addProductWithImages } from "../controllers/product.controller.js";
+import {
+  addProductWithImages,
+  updateProductWithImages,
+} from "../controllers/product.controller.js";
 
 const router = express.Router();
 
@@ -65,9 +68,15 @@ router
     )
   )
   .put(
+    upload.fields([
+      { name: "cover_image", maxCount: 1 },
+      { name: "images", maxCount: 10 },
+    ]),
     validate(updateProductSchema),
+    attachCoverImage(),
     attachUpdateQuery(productModel),
-    filterOne({ filedName: "slug", paramName: "productSlug" }, excuteQuery())
+    filterOne({ filedName: "slug", paramName: "productSlug" }),
+    updateProductWithImages()
   )
   .delete(
     validate(deleteProductSchema),

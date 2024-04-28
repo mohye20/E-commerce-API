@@ -113,6 +113,28 @@ productSchema.pre(/delete/, async function (next) {
 
   next();
 });
+
+productSchema.pre(/update/i, async function (next) {
+  if (!this._update.cover_image) return next();
+  const toBeUpdatedProduct = await productModel.findOne(this._conditions);
+  if (!toBeUpdatedProduct) return next();
+  await mongoose
+    .model("image")
+    .findByIdAndDelete(toBeUpdatedProduct.cover_image);
+  next();
+});
+
+// productSchema.pre(/update/i, async function (next) {
+//   const toBeUpdatedProduct = await productModel.findOne(this._conditions);
+//   if (!toBeUpdatedProduct) return next();
+//   await Promise.all(
+//     toBeUpdatedProduct.images.map(async (image) => {
+//       await mongoose.model("image").findByIdAndDelete(image.image_id);
+//       await mongoose.model("image_product").findByIdAndDelete(image._id);
+//     })
+//   );
+//   next();
+// });
 const productModel = mongoose.model("product", productSchema);
 
 export default productModel;
