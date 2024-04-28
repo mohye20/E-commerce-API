@@ -24,6 +24,12 @@ imageOnProductSchema.pre(/find/, function (next) {
   next();
 });
 
+imageOnProductSchema.pre(/delete/i, async function (next) {
+  const toBeDeletedIOP = await imageOnProductModel.findOne(this._conditions);
+  if (!toBeDeletedIOP) return next();
+  await mongoose.model("image").findByIdAndDelete(toBeDeletedIOP._id);
+});
+
 const imageOnProductModel = mongoose.model(
   "image_product",
   imageOnProductSchema

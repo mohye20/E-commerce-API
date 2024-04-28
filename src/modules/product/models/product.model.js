@@ -93,6 +93,26 @@ productSchema.pre(/find/, function (next) {
   this.populate("images", ["-product_id", "image_id"]);
   next();
 });
+
+productSchema.pre(/delete/i, async function (next) {
+  const toBeDeleteProduct = await productModel.findOne(this._conditions);
+  if (!toBeDeleteProduct) return next();
+  await mongoose.model("image").findOneAndDelete(toBeDeleteProduct.cover_image);
+  next();
+});
+
+productSchema.pre(/delete/, async function (next) {
+  const toBeDeleteProduct = await productModel.findOne(this._conditions);
+  if (!toBeDeleteProduct) return next();
+  await Promise.all(
+    toBeDeleteProduct.images.map(async (image) => {
+      await mongoose.model("image").findByIdAndDelete(image.image_id);
+      await mongoose.model("image_product").findByIdAndDelete(image._id);
+    })
+  );
+
+  next();
+});
 const productModel = mongoose.model("product", productSchema);
 
 export default productModel;
