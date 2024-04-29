@@ -1,29 +1,31 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    name: {
+    text: {
       type: String,
       minLength: 3,
-      maxLength: 200,
+      maxLength: 20000,
       require: true,
       trim: true,
-      unique: true,
     },
 
-    slug: {
-      type: String,
-      minLength: 3,
-      maxLength: 200,
+    rating: {
+      type: Number,
       require: true,
-      trim: true,
-      unique: true,
+      enum: [1, 2, 3, 4, 5],
     },
 
-    image: {
+    product_id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "image",
+      ref: "product",
+    },
+
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "user",
     },
   },
   {

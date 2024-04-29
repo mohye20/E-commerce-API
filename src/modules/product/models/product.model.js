@@ -78,6 +78,12 @@ productSchema.pre("save", function (next) {
   next();
 });
 
+productSchema.pre(/update/i, function (next) {
+  if (this._update.name)
+    this._update.slug = slugify(this._update.name, { lower: true });
+  next();
+});
+
 productSchema.pre(/find/, function (next) {
   this.populate("cover_image");
   next();
