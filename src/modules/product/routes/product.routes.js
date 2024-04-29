@@ -1,4 +1,5 @@
 import express from "express";
+import reviewRouter from "../routes/review.routes.js";
 import {
   filterOne,
   filterQuery,
@@ -81,7 +82,10 @@ router
   .delete(
     validate(deleteProductSchema),
     attachDeleteQuery(productModel),
+    filterOne({ filedName: "slug", paramName: "productSlug" }),
     excuteQuery()
   );
+
+router.use("/:productSlug/review", reviewRouter);
 
 export default router;

@@ -30,7 +30,8 @@ export const signinScehma = joi.object({
     password: joi
       .string()
       .required()
-      .pattern(/^[A-Z]/),
+      .pattern(/^[A-Z]/)
+      .message("Password must be starting with Capital letters"),
   },
   query: {},
   params: {},

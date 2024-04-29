@@ -2,7 +2,7 @@ import userSearch from "../../../utils/checkUser.js";
 import AppError, { catchError } from "../../../utils/errorHandler.js";
 import { decodeAuthToken } from "../../../utils/token.js";
 
-export const authenticate = async (req, res, next) => {
+export const authenticate = catchError(async (req, res, next) => {
   const token = req.header("token");
   if (!token) {
     throw new AppError("Unizirthed", 401);
@@ -13,7 +13,7 @@ export const authenticate = async (req, res, next) => {
 
   req.user = decoded;
   next();
-};
+});
 
 export const authorize = (role) => {
   return (req, res, next) => {
