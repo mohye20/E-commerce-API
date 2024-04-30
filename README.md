@@ -21,6 +21,11 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 - MongoDB
 - Mongoose
 - JWT
+- joi
+- bcrypt
+- nodemailer
+- multer
+- morgan
 
 **Image Upload:**
 
@@ -38,9 +43,8 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 
 #### User Authentication
 
-- `POST /api/v1/auth/register` - Register a new user.
+- `POST /api/v1/auth/signup` - Register a new user.
 - `POST /api/v1/auth/login` - Login with an existing user.
-- `GET /api/v1/auth/logout` - Logout the current user.
 
 #### User
 
@@ -53,7 +57,7 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 #### Products
 
 - `GET /api/v1/products` - Get all products.
-- `POST /api/v1/products` - Create a new product.
+- `POST /api/v1/product` - Create a new product.
 - `POST /api/v1/products/uploadImage` - Upload an image for a product..
 - `GET /api/v1/products/:id` - Get a single product by ID .
 - `PATCH /api/v1/products/:id` - Update a product by ID .
@@ -100,10 +104,17 @@ npm install
    Example:
 
 ```
-PORT=5000
-MONGO_URL=mongodb://localhost/ecommerce
-JWT_SECRET=your_secret_key_here
-JWT_LIFETIME=1d
+PORT = 3000
+SECRET_KEY="SekretKeysSecured"
+SALT_ROUND = 8
+EMAIL=  <Add  Email Here>,
+EMAIL_PASSWORD = <Add  password Here>,
+
+MODE = "developement"
+
+CLOUDINARY_CLOUD_NAME = <Add  Cloud Name  Here>,
+CLOUDINARY_API_KEY = <Add  Api Key Here>,
+CLOUDINARY_API_SECRET = <Add  Api Secret Here>,
 
 ```
 
