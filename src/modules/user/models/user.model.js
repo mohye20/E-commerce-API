@@ -40,10 +40,21 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    whishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product",
+      },
+    ],
   },
   { timestamps: true }
 );
 
+userSchema.pre(/find/, function (next) {
+  this.populate("whishlist");
+  next();
+});
 const userModel = mongoose.model("user", userSchema);
 
 export default userModel;
