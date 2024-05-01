@@ -24,7 +24,6 @@ export const deleteCoupon = catchError(async (req, res, next) => {
 
 export const updateCoupon = catchError(async (req, res, next) => {
   const { couponId } = req.params;
-  console.log(couponId);
   const coupon = await couponModel.findByIdAndUpdate(couponId, req.body);
   if (coupon)
     return res.status(200).json({ message: "Coupon updated successfully" });

@@ -13,7 +13,6 @@ export const addToCart = catchError(async (req, res, next) => {
     return entry.product_id._id.toString() === product_id;
   });
 
-  console.log(prtocutEntry);
   if (!prtocutEntry) {
     cart.products.push({ product_id, quantity: 1 });
   } else {

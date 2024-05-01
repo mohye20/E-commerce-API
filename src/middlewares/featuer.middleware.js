@@ -5,6 +5,13 @@ export const filterOne = ({ filedName, paramName }) => {
   };
 };
 
+export const filterId = ({ filedName }) => {
+  return (req, res, next) => {
+    req.dbQuery = req.dbQuery.where({ [filedName]: req.user.id });
+    next();
+  };
+};
+
 export const paginateQuery =
   (pageSize = 5) =>
   (req, res, next) => {

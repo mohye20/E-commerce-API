@@ -12,8 +12,6 @@ export const updateWhishlish = catchError(async (req, res, next) => {
   const indexOfProduct = user.whishlist.findIndex(
     ({ _id }) => _id.toString() === product_id
   );
-  console.log(indexOfProduct);
-  console.log(user.whishlist);
   if (indexOfProduct === -1) {
     user.whishlist.push(product_id), await user.save();
   } else {

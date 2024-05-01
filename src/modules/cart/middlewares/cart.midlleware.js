@@ -4,7 +4,6 @@ import cartModel from "../models/cart.model.js";
 
 export const assertCart = catchError(async (req, res, next) => {
   const cart = await cartModel.findOne({ user_id: req.user.id });
-  console.log(cart);
   if (cart) return next();
   await cartModel.create({ user_id: req.user.id, products: [] });
   next();
