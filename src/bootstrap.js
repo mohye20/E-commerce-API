@@ -23,7 +23,7 @@ const bootstrap = (app, express) => {
   });
 
   app.use(globalErrorHandler);
-  const port = process.env.PORT || 5000;
+  const port = process.env.PORT;
   app.listen(port, () => {
     console.log("Server Running in Port " + port);
   });
