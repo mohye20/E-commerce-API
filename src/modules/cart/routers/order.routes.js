@@ -15,7 +15,10 @@ import {
 } from "../../../middlewares/featuer.middleware.js";
 import validate from "../../../middlewares/validation.middleware.js";
 import { addOrderSchema } from "../controllers/validations/order.validation.js";
-import { makeCOD } from "../controllers/order.controller.js";
+import {
+  makeCOD,
+  makePaymentSession,
+} from "../controllers/order.controller.js";
 
 const router = express.Router();
 
@@ -38,8 +41,8 @@ router
     assertCart,
     makeCOD
   );
-// router
-//   .route("/card")
-//   .put(authenticate, authorize(ROLES.USER), assertCart, makeOnlineSession);
+router
+  .route("/card")
+  .post(authenticate, authorize(ROLES.USER), assertCart, makePaymentSession);
 
 export default router;

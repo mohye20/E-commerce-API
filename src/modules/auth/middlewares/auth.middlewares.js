@@ -1,18 +1,23 @@
 import userSearch from "../../../utils/checkUser.js";
 import AppError, { catchError } from "../../../utils/errorHandler.js";
-import { decodeAuthToken } from "../../../utils/token.js";
-
+import jwt from "jsonwebtoken";
 export const authenticate = catchError(async (req, res, next) => {
   const token = req.header("token");
-  if (!token) {
-    throw new AppError("Unizirthed", 401);
-  }
-  const decoded = await decodeAuthToken(token).catch((error) => {
-    throw new AppError(error.message, 498);
-  });
 
-  req.user = decoded;
-  next();
+  console.log(token);
+  if (!token || !token.startsWith("Bearer"))
+    throw new AppError("Unauthorized", 401);
+
+  const bearerToken = token.split(" ")[1];
+  console.log(bearerToken);
+
+  try {
+    const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    throw new AppError(error.message, 498);
+  }
 });
 
 export const authorize = (role) => {

@@ -45,7 +45,7 @@ cartSchema.pre(/find/, function (next) {
   next();
 });
 
-cartSchema.virtual("Total Price").get(function () {
+cartSchema.virtual("total_Price").get(function () {
   const total = this.products.reduce((acc, entry) => {
     return acc + entry.product_id.discount_price * entry.quantity;
   }, 0);

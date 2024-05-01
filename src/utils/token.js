@@ -6,7 +6,7 @@ export const generateAuthToken = (user) => {
       email: user.email,
       role: user.role,
       id: user._id,
-      userName: user.userName,
+      name: user.name,
     },
     process.env.SECRET_KEY
   );

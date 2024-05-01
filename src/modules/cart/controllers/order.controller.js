@@ -1,4 +1,8 @@
 import AppError, { catchError } from "../../../utils/errorHandler.js";
+import {
+  StripePaymentService,
+  payOnline,
+} from "../../../utils/onlinePayment.js";
 import productModel from "../../product/models/product.model.js";
 import cartModel from "../models/cart.model.js";
 import orderModel from "../models/order.model.js";
@@ -48,4 +52,11 @@ export const makeCOD = catchError(async (req, res, next) => {
   await productModel.bulkWrite(bulkWriteOptions);
   await cartModel.deleteOne({ user_id: req.user.id });
   res.json({ order });
+});
+
+export const makePaymentSession = catchError(async (req, res, next) => {
+  const cart = await cartModel.findOne({ user_id: req.user.id });
+  const stripePaymentService = StripePaymentService;
+  const session = await payOnline(cart, req, stripePaymentService);
+  res.json(session);
 });
