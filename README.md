@@ -2,6 +2,7 @@
 
 This is a REST API built using Node.js and Express.js for eCommerce. It provides endpoints for user authentication, product management, review management, and order management.
 
+documentation: https://documenter.getpostman.com/view/29973719/2sA3JFA4JB
 ## Features
 
 - User registration
