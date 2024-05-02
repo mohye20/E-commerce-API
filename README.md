@@ -85,7 +85,7 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 1. Clone the repository.
 
 ```
-
+https://github.com/mohye20/E-commerce-API.git
 ```
 
 2. Navigate to the project directory.
