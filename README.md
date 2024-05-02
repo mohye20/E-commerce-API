@@ -6,11 +6,14 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 
 - User registration
 - User login and logout
-- Product creation, update, deletion, and retrieval
-- Review creation, update, deletion, and retrieval
-- Order creation, update, deletion, and retrieval
+- Product creation, update, deletion
+- category creation, update, deletion
+- sub category creation, update, deletion
+- Review creation, update, deletion, 
+- Order creation, update, deletion, 
 - Image upload for products
 - JWT-based authentication
+- online payment by stripe
 
 ## Tech Stack
 
@@ -26,6 +29,10 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 - nodemailer
 - multer
 - morgan
+- stripe
+- dotenv
+- pdfkit
+- slugify   
 
 **Image Upload:**
 
@@ -48,29 +55,34 @@ This is a REST API built using Node.js and Express.js for eCommerce. It provides
 
 #### User
 
-- `GET /api/v1/users` - Get all users.
-- `GET /api/v1/users/:id` - Get single user.
-- `GET /api/v1/users/showMe` - Show current user.
-- `PATCH /api/v1/users/updateUser` - Update user profile.
-- `PATCH /api/v1/users/updateUserPassword` - Update User Password.
+- `GET /api/v1/user/all` - Get all users.
+- `GET /api/v1/user` - Show current user.
+- `PATCH /api/v1/user/` - Update user profile.
 
 #### Products
 
-- `GET /api/v1/products` - Get all products.
+- `GET /api/v1/product` - Get all products.
 - `POST /api/v1/product` - Create a new product.
-- `POST /api/v1/products/uploadImage` - Upload an image for a product..
-- `GET /api/v1/products/:id` - Get a single product by ID .
-- `PATCH /api/v1/products/:id` - Update a product by ID .
-- `DELETE /api/v1/products/:id` - Delete a product by ID .
-- `GET /api/v1/products/:id/reviews` - Get a single product review.
+- `GET /api/v1/product/:slug` - Get a single product by slug .
+- `PATCH /api/v1/product/:slug` - Update a product by slug .
+- `DELETE /api/v1/product/:slug` - Delete a product by slug .
+
 
 #### Product Reviews
 
-- `GET /api/v1/reviews` - Get all reviews for a product.
-- `POST /api/v1/reviews` - Create a new review for a product.
-- `GET /api/v1/reviews/:id` - Get a single review by ID.
-- `PATCH /api/v1/reviews/:id` - Update a review by ID.
-- `DELETE /api/v1/reviews/:id` - Delete a review by ID.
+- `GET /api/v1/product/slug/review` - Get all reviews for a product.
+- `POST api/v1/product/slug/review` - Create a new review for a product.
+- `GET /api/v1/reviews/:id` - Get a single review by slug.
+- `PATCH /api/v1/reviews/:id` - Update a review by slug.
+- `DELETE /api/v1/product/slug/review` - Delete a review by slug.
+
+#### brand Reviews
+
+- `POST /api/v1/brand` - Create a new brand .
+- `GET /api/v1/brand/` - Get a all brands.
+- `PUT /api/v1/brand/slug` - Update a brand by slug.
+- `DELETE api/v1/brand/slug` - Delete a brand by slug.
+
 
 #### Order
 
@@ -104,17 +116,23 @@ npm install
    Example:
 
 ```
-PORT = 3000
-SECRET_KEY="SekretKeysSecured"
-SALT_ROUND = 8
-EMAIL=  <Add  Email Here>,
-EMAIL_PASSWORD = <Add  password Here>,
+PORT = PORT
+SECRET_KEY="SECRET_KEY"
+SALT_ROUND = SALT_ROUND
+EMAIL=  "EMAIL",
+EMAIL_PASSWORD = "EMAIL_PASSWORD"
+MODE = "MODE"
+DB_STRING = "DB_STRING"
 
-MODE = "developement"
+CLOUDINARY_CLOUD_NAME = "CLOUDINARY_CLOUD_NAME"
+CLOUDINARY_API_KEY = "CLOUDINARY_API_KEY"
+CLOUDINARY_API_SECRET = "CLOUDINARY_API_SECRET-nSc3MFHe3uPfMt0"
 
-CLOUDINARY_CLOUD_NAME = <Add  Cloud Name  Here>,
-CLOUDINARY_API_KEY = <Add  Api Key Here>,
-CLOUDINARY_API_SECRET = <Add  Api Secret Here>,
+
+
+STRIPE_SECRET_KEY = "STRIPE_SECRET_KEY"
+STRTIPE_WEBHOOK_SECRET_KEY="STRTIPE_WEBHOOK_SECRET_KEY"
+
 
 ```
 
