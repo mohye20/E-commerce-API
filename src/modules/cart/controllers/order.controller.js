@@ -4,6 +4,7 @@ import {
   payOnline,
 } from "../../../utils/onlinePayment.js";
 import productModel from "../../product/models/product.model.js";
+import userModel from "../../user/models/user.model.js";
 import cartModel from "../models/cart.model.js";
 import orderModel from "../models/order.model.js";
 
@@ -60,3 +61,24 @@ export const makePaymentSession = catchError(async (req, res, next) => {
   const session = await payOnline(cart, req, stripePaymentService);
   res.json(session);
 });
+
+export const makeOnlineOrder = async (data) => {
+  const { customer_email } = data;
+  const user = await userModel.findOne({ email: customer_email });
+  const cart = await cartModel.findOne({ user_id });
+  const order = await orderModel.create({
+    user_id: user._id,
+    address: "Alex",
+    coupon: {
+      discount: cart.coupon_id?.discount || 0,
+    },
+    is_paid: true,
+    products: cart.products.map(
+      ({ product_id: { title, price, discount_price }, quantity }) => ({
+        quantity,
+        product: { title, price, discount_price },
+      })
+    ),
+    phone_number: "",
+  });
+};

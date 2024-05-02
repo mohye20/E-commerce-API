@@ -33,6 +33,8 @@ export const StripePaymentService = {
       cancel_url: "https://github.com/mohye20/E-commerce-API",
       client_reference_id: cart._id.toString(),
       customer_email: req.user.email,
+      after_expiration,
+      metadata: [{ address: req.body.address }],
     });
     return session;
   },

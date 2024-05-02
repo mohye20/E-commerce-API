@@ -1,15 +1,19 @@
 import dotenv from "dotenv";
 import dbConnection from "../db/dbConnection.js";
-import AppError, { globalErrorHandler } from "./utils/errorHandler.js";
+import AppError, {
+  catchError,
+  globalErrorHandler,
+} from "./utils/errorHandler.js";
 import v1Router from "./routes/v1.routes.js";
 import morgan from "morgan";
 import { v2 as cloudinary } from "cloudinary";
 import stripe from "stripe";
+import { makeOnlineOrder } from "./modules/cart/controllers/order.controller.js";
 const bootstrap = (app, express) => {
   app.post(
     "/webhook",
     express.raw({ type: "application/json" }),
-    (request, response) => {
+    catchError(async (request, response) => {
       const sig = request.headers["stripe-signature"];
 
       let event;
@@ -29,14 +33,14 @@ const bootstrap = (app, express) => {
       switch (event.type) {
         case "checkout.session.completed":
           const data = event.data.object;
-          console.log(data);
+          await makeOnlineOrder(data);
           break;
         default:
           console.log(`Unhandled event type ${event.type}`);
       }
 
       response.send();
-    }
+    })
   );
 
   dotenv.config();
