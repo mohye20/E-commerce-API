@@ -7,6 +7,8 @@ import productModel from "../../product/models/product.model.js";
 import userModel from "../../user/models/user.model.js";
 import cartModel from "../models/cart.model.js";
 import orderModel from "../models/order.model.js";
+import createInvoice from "../../../utils/pdf.js";
+import { sendPDFByEmail } from "../../../utils/email.js";
 
 export const makeCOD = catchError(async (req, res, next) => {
   const cart = await cartModel.findOne({ user_id: req.user.id });
@@ -52,6 +54,41 @@ export const makeCOD = catchError(async (req, res, next) => {
   );
   await productModel.bulkWrite(bulkWriteOptions);
   await cartModel.deleteOne({ user_id: req.user.id });
+
+  // make Invoice
+
+  const invoice = {
+    shipping: {
+      name: req.user.name,
+      address: req.body.address,
+    },
+    items: cart.products.map(
+      ({ product_id: { title, description, discount_price }, quantity }) => ({
+        item: title,
+        description,
+        quantity,
+        amount: quantity * discount_price * 100,
+      })
+    ),
+
+    subtotal: cart.total_Price * 100,
+    paid: 0,
+    invoice_nr: order._id,
+  };
+
+  console.log({ user: process.env.EMAIL, pass: process.env.EMAIL_PASSWORD });
+
+  createInvoice(invoice, "invoice.pdf");
+  console.log(req.user);
+  // await transporter.sendMail({
+  //   from: process.env.EMAIL,
+  //   to: req.user.email,
+  //   attachments: [{ filename: "invoice.pdf", content: pdfFile }],
+  // });
+  const pdfFilePath = "invoice.pdf";
+  const recipientEmail = "recipient@example.com";
+  sendPDFByEmail("invoice.pdf", req.user.email);
+
   res.json({ order });
 });
 

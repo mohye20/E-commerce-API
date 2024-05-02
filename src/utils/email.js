@@ -1,22 +1,41 @@
-import nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
+import { readFileSync } from "fs";
+import path from "path";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-  debug: true,
-});
+export async function sendPDFByEmail(pdfFilePath, recipientEmail) {
+  try {
+    // Read PDF file
+    const pdfFile = readFileSync("invoice.pdf");
 
-const sendEmail = async (email, token, req) => {
-  await transporter.sendMail({
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Email verification",
-    text: "Please validate you email address",
-    html: `<a href="${req.protocol}://${req.headers.host}/api/v1/auth/verify-email/${token}">Click here to confirm your email address</a>`,
-  });
-};
+    // Create Nodemailer transporter
+    const transporter = createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-export default sendEmail;
+    // Setup email data
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: recipientEmail,
+      subject: "PDF Attachment",
+      text: "Please find the attached PDF file.",
+      attachments: [
+        {
+          filename: "invoice.pdf",
+          content: pdfFile,
+        },
+      ],
+    };
+
+    // Send email with PDF attachment
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent: ", info.messageId);
+  } catch (error) {
+    console.error("Error sending email: ", error);
+  }
+}
+
+// Example usage

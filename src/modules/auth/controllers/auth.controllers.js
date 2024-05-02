@@ -5,7 +5,7 @@ import hashingPassword, {
 import userSearch from "../../../utils/checkUser.js";
 import { generateAuthToken } from "../../../utils/token.js";
 import userModel from "../../user/models/user.model.js";
-import sendEmail from "../../../utils/email.js";
+// import sendEmail from "../../../utils/email.js";
 
 export const signUp = catchError(async (req, res, next) => {
   const { name, email, password } = req.body;

@@ -4,12 +4,10 @@ import jwt from "jsonwebtoken";
 export const authenticate = catchError(async (req, res, next) => {
   const token = req.header("token");
 
-  console.log(token);
   if (!token || !token.startsWith("Bearer"))
     throw new AppError("Unauthorized", 401);
 
   const bearerToken = token.split(" ")[1];
-  console.log(bearerToken);
 
   try {
     const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
