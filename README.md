@@ -93,6 +93,10 @@ documentation: https://documenter.getpostman.com/view/29973719/2sA3JFA4JB
 - `PATCH /api/v1/orders/:id` - Update a order.
 - `GET /api/v1/orders/showAllMyOrder` - Get a current user orders.
 
+
+#### see More 
+https://documenter.getpostman.com/view/29973719/2sA3JFA4JB
+
 ## Installation
 
 1. Clone the repository.
