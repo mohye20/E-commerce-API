@@ -4,7 +4,41 @@ import AppError, { globalErrorHandler } from "./utils/errorHandler.js";
 import v1Router from "./routes/v1.routes.js";
 import morgan from "morgan";
 import { v2 as cloudinary } from "cloudinary";
+import stripe from "stripe";
 const bootstrap = (app, express) => {
+  app.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    (request, response) => {
+      const sig = request.headers["stripe-signature"];
+
+      let event;
+
+      try {
+        event = stripe.webhooks.constructEvent(
+          request.body,
+          sig,
+          process.env.STRTIPE_WEBHOOK_SECRET_KEY
+        );
+      } catch (err) {
+        response.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+      }
+
+      // Handle the event
+      switch (event.type) {
+        case "checkout.session.completed":
+          const data = event.data.object;
+          console.log(data);
+          break;
+        default:
+          console.log(`Unhandled event type ${event.type}`);
+      }
+
+      response.send();
+    }
+  );
+
   dotenv.config();
   app.use(express.json());
   dbConnection();
